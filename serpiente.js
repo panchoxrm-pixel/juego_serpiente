@@ -1,8 +1,16 @@
-    const TAMANIO_CELDA = 25;   
-   
+    const TAMANIO_CELDA = 25;
+      
    // 1. Capturamos el canvas y su contexto de dibujo
     const canvas = document.getElementById("canvasJuego");
     const ctx = canvas.getContext("2d");
+
+     const serpiente = [
+      {x:0,y:8},
+      {x:0,y:9},
+      {x:0,y:10},
+      {x:0,y:11},
+      {x:0,y:12},
+    ];
  
     // Primera pintura del juego al cargar la página
     dibujarTodo();
@@ -18,16 +26,10 @@
     function dibujarTodo() {
       limpiarCanvas();
       dibujarTablero();
-      pintarParte(5,5);
-      pintarParte(10,2);
-      pintarParte(15,(canvas.height/TAMANIO_CELDA)-1);
-      pintarParte((canvas.width/TAMANIO_CELDA)-1,14);
-      pintarParte(0,19);
-      pintarParte((canvas.width/TAMANIO_CELDA)-1,(canvas.height/TAMANIO_CELDA)-1);
+      pintarSerpiente();      
     }
 
-    function dibujarTablero() {
-      
+    function dibujarTablero() {      
       ctx.lineWidth = 2;
       ctx.strokeStyle = "red"       
       for(let i = TAMANIO_CELDA; i < canvas.width; i += TAMANIO_CELDA){
@@ -37,22 +39,28 @@
         ctx.stroke();
       }
 
-      for(let i = TAMANIO_CELDA; i < canvas.height; i += TAMANIO_CELDA){
-       
+      for(let i = TAMANIO_CELDA; i < canvas.height; i += TAMANIO_CELDA){       
         ctx.beginPath();
         ctx.moveTo(0,i);
         ctx.lineTo(canvas.width,i);
         ctx.stroke();
       }
+    }
 
+    function pintarParte(lineaX, lineaY, color){
+      ctx.fillStyle = color;
+      ctx.fillRect(lineaX * TAMANIO_CELDA, lineaY * TAMANIO_CELDA, TAMANIO_CELDA, TAMANIO_CELDA);
+      ctx.strokeStyle = "black";
+      ctx.strokeRect(lineaX * TAMANIO_CELDA, lineaY * TAMANIO_CELDA, TAMANIO_CELDA, TAMANIO_CELDA);
+    }
+     
+    function pintarSerpiente(){
+      for(let i = 0; i < serpiente.length; i ++){
+        const parteActual = serpiente[i];
+        if(i === 0){
+          pintarParte(parteActual.x, parteActual.y, "lime");
+        } else {
+          pintarParte(parteActual.x, parteActual.y, "yellow");
+        }       
       }
-
-      function pintarParte(lineaX, lineaY){
-        
-        ctx.fillStyle = "yellow";
-        ctx.fillRect(lineaX * TAMANIO_CELDA, lineaY * TAMANIO_CELDA, TAMANIO_CELDA, TAMANIO_CELDA);
-        
-        ctx.strokeStyle = "black";
-        ctx.strokeRect(lineaX * TAMANIO_CELDA, lineaY * TAMANIO_CELDA, TAMANIO_CELDA, TAMANIO_CELDA);
-
-      }
+    }
